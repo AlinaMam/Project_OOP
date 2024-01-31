@@ -1,4 +1,4 @@
-package org.example.MyFirstPackage;
+package org.example.lab1.MyFirstPackage;
 
 import java.util.Arrays;
 import java.util.Random;
@@ -47,11 +47,7 @@ public class MySecondClass {
         for (int i = 0; i < buffer.length; i++) {
             sum += buffer[i];
         }
-<<<<<<< HEAD
         double result = (double) sum/ buffer.length;
-=======
-        double result = (double) sum / buffer.length;
->>>>>>> 7e08421 (Лабораторная работа №1)
         return result;
     }
 

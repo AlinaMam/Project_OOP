@@ -1,4 +1,4 @@
-package org.example.MyFirstProgram;
+package org.example.lab1.MyFirstProgram;
 
 public class MyFirstClass {
     public static void main (String[] args) {

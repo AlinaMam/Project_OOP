@@ -1,6 +1,6 @@
 package org.example;
 
-import org.example.MyFirstPackage.MySecondClass;
+import org.example.lab1.MyFirstPackage.MySecondClass;
 
 public class Main {
     public static void main(String[] args) {
