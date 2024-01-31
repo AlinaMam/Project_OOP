@@ -17,11 +17,12 @@ public class MySecondClass {
     public void getElement(int index) {
         if (buffer.length == 0) {
             System.out.println("Массив пустой");
-        }
-        if (index >= buffer.length || index < 0) {
-            System.out.println("Укажите индекс в пределах от 0 до " + (buffer.length - 1) + " включительно");
         } else {
-            System.out.println(buffer[index]);
+            if (index >= buffer.length || index < 0) {
+                System.out.println("Укажите индекс в пределах от 0 до " + (buffer.length - 1) + " включительно");
+            } else {
+                System.out.println(buffer[index]);
+            }
         }
     }
 
@@ -46,7 +47,11 @@ public class MySecondClass {
         for (int i = 0; i < buffer.length; i++) {
             sum += buffer[i];
         }
+<<<<<<< HEAD
         double result = (double) sum/ buffer.length;
+=======
+        double result = (double) sum / buffer.length;
+>>>>>>> 7e08421 (Лабораторная работа №1)
         return result;
     }
 
