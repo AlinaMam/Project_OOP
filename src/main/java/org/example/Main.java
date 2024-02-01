@@ -8,7 +8,7 @@ import java.util.LinkedList;
 
 public class Main {
     public static void main(String[] args) throws CloneNotSupportedException, NoSuchModelNameException, DuplicateModelNameException, ModelPriceOutOfBoundsException {
-        /*//Лабораторная №1
+        /*//Лабораторная работа №1
         MySecondClass mySecondClass = new MySecondClass();
         mySecondClass.changeElement(1, 100);
         System.out.println(mySecondClass.average());
