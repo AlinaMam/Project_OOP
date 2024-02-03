@@ -1,4 +1,4 @@
-package org.example.lab2;
+package org.example.lab2_3;
 
 public class NoSuchModelNameException extends Exception{
     private String modelName;

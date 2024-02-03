@@ -1,16 +1,19 @@
-package org.example.lab2;
+package org.example.lab2_3;
 
+import java.io.Serializable;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
-public class Bike implements Vehicle{
+public class Bike implements Vehicle, Serializable {
     private String brand;
-    private LinkedList<Bike.Model> list;
+    private transient LinkedList<Bike.Model> list;
+    private int size;
 
-    public Bike(String brand) {
+    public Bike(String brand, int size) {
         this.brand = brand;
+        this.size = size;
     }
 
     public String getBrand() {
@@ -27,6 +30,15 @@ public class Bike implements Vehicle{
 
     public void setList(LinkedList<Bike.Model> list) {
         this.list = list;
+    }
+
+    public int getSize() {
+        return size;
+    }
+
+    public void setSize(int size) {
+        this.size = size;
+
     }
 
     public void changeModelName(String oldName, String newName) throws NoSuchModelNameException {
@@ -90,6 +102,7 @@ public class Bike implements Vehicle{
             throw new DuplicateModelNameException("We already have this model", model.getModelName());
         }
         list.add(model);
+        this.setSize(this.getSizeLinkedList());
     }
 
     public void deleteModel(String name) throws NoSuchModelNameException {
@@ -104,12 +117,19 @@ public class Bike implements Vehicle{
                 iterator.remove();
             }
         }
+        this.setSize(this.getSizeLinkedList());
     }
 
     public int getSizeLinkedList() {
-        return this.getList().size();
+        return list.size();
     }
 
+    @Override
+    public String toString() {
+        StringBuffer buffer = new StringBuffer();
+        buffer.append("Bike:brand= ").append(brand).append(", ").append("Bike:count of models= ").append(size);
+        return buffer.toString();
+    }
 
     public class Model {
         private String modelName;
@@ -124,12 +144,12 @@ public class Bike implements Vehicle{
             return modelName;
         }
 
-        public void setModelName(String modelName) {
-            this.modelName = modelName;
-        }
-
         public int getPrice() {
             return price;
+        }
+
+        public void setModelName(String modelName) {
+            this.modelName = modelName;
         }
 
         public void setPrice(int price) {
@@ -138,13 +158,10 @@ public class Bike implements Vehicle{
 
         @Override
         public String toString() {
-            return "Model{" +
-                    "modelName='" + modelName + '\'' +
-                    ", price=" + price +
-                    '}';
+            StringBuffer buffer = new StringBuffer();
+            buffer.append("Bike:model= ").append(modelName).append(", ").append("Bike:price= ").append(price);
+            return buffer.toString();
         }
     }
-
-
 }
 

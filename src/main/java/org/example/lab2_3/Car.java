@@ -1,11 +1,12 @@
-package org.example.lab2;
+package org.example.lab2_3;
 
+import java.io.Serializable;
 import java.util.Arrays;
 import java.util.List;
 
-public class Car implements Vehicle{
+public class Car implements Vehicle, Serializable {
     private String brand;
-    private Model[] array;
+    private transient Model[] array;
     private int length;
 
     public Car(String brand, int length) {
@@ -130,12 +131,12 @@ public class Car implements Vehicle{
         return this.getArray().length;
     }
 
+
     @Override
     public String toString() {
-        return "Car{" +
-                "brand='" + brand + '\'' +
-                ", length=" + length +
-                '}';
+        StringBuffer buffer = new StringBuffer();
+        buffer.append("Car:brand= ").append(brand).append(", ").append("Car:count of models= ").append(length);
+        return buffer.toString();
     }
 
     public class Model {
@@ -155,20 +156,19 @@ public class Car implements Vehicle{
             return price;
         }
 
-        public void setPrice(int price) {
-            this.price = price;
-        }
-
         public void setModelName(String modelName) {
             this.modelName = modelName;
         }
 
+        public void setPrice(int price) {
+            this.price = price;
+        }
+
         @Override
         public String toString() {
-            return "Model{" +
-                    "modelName='" + modelName + '\'' +
-                    ", price=" + price +
-                    '}';
+            StringBuffer buffer = new StringBuffer();
+            buffer.append("Car:model= ").append(modelName).append(", ").append("Car:price= ").append(price);
+            return buffer.toString();
         }
     }
 }
