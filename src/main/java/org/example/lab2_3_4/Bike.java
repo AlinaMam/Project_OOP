@@ -1,17 +1,16 @@
-package org.example.lab2_3;
+package org.example.lab2_3_4;
 
 import java.io.Serializable;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
-public class Car implements Vehicle, Serializable {
+public class Bike implements Vehicle, Serializable, Cloneable {
     private String brand;
-    private transient Model[] array;
-    private int length;
+    private LinkedList<Bike.Model> list;
+    private int size;
 
-    public Car(String brand, int length) {
+    public Bike(String brand, int size) {
         this.brand = brand;
-        this.length = length;
+        this.size = size;
     }
 
     public String getBrand() {
@@ -22,24 +21,21 @@ public class Car implements Vehicle, Serializable {
         this.brand = brand;
     }
 
-    public Model[] getArray() {
-        return array;
+    public LinkedList<Model> getList() {
+        return list;
     }
 
-    public void setArray(Model[] array) {
-        if (this.getLength() != array.length) {
-            System.out.println("Array length is incorrect");
-        } else {
-            this.array = array;
-        }
+    public void setList(LinkedList<Bike.Model> list) {
+        this.list = list;
     }
 
-    public int getLength() {
-        return length;
+    public int getSize() {
+        return size;
     }
 
-    private void setLength(int length) {
-        this.length = length;
+    public void setSize(int size) {
+        this.size = size;
+
     }
 
     public void changeModelName(String oldName, String newName) throws NoSuchModelNameException {
@@ -47,7 +43,7 @@ public class Car implements Vehicle, Serializable {
         if (!namesList.contains(oldName)) {
             throw new NoSuchModelNameException("We don't have this model", oldName);
         }
-        for (Car.Model model : array) {
+        for (Bike.Model model : list) {
             if (model.getModelName().equals(oldName)) {
                 model.setModelName(newName);
             }
@@ -55,8 +51,8 @@ public class Car implements Vehicle, Serializable {
     }
 
     public String[] getNamesOfModels() {
-        String[] namesOfModels = Arrays.stream(array)
-                .map(Car.Model::getModelName)
+        String[] namesOfModels = list.stream()
+                .map(Bike.Model::getModelName)
                 .toArray(String[]::new);
         return namesOfModels;
     }
@@ -66,7 +62,7 @@ public class Car implements Vehicle, Serializable {
         if (!namesList.contains(name)) {
             throw new NoSuchModelNameException("We don't have this model", name);
         }
-        for (Car.Model model : array) {
+        for (Bike.Model model : list) {
             if (model.getModelName().equals(name)) {
                 return model.getPrice();
             }
@@ -74,7 +70,7 @@ public class Car implements Vehicle, Serializable {
         return 0;
     }
 
-    public void changeModelPrice(String name, int newPrice) throws NoSuchModelNameException, ModelPriceOutOfBoundsException {
+    public void changeModelPrice(String name, int newPrice) throws ModelPriceOutOfBoundsException, NoSuchModelNameException {
         if (newPrice <= 0) {
             throw new ModelPriceOutOfBoundsException("Price must be more than zero", newPrice);
         }
@@ -82,7 +78,7 @@ public class Car implements Vehicle, Serializable {
         if (!namesList.contains(name)) {
             throw new NoSuchModelNameException("We don't have this model", name);
         }
-        for (Model model : array) {
+        for (Bike.Model model : list) {
             if (model.getModelName().equals(name)) {
                 model.setPrice(newPrice);
             }
@@ -90,23 +86,20 @@ public class Car implements Vehicle, Serializable {
     }
 
     public int[] getPricesOfModels() {
-        int[] prices = Arrays.stream(array)
-                .map(Model::getPrice)
+        int[] prices = list.stream()
+                .map(Bike.Model::getPrice)
                 .mapToInt(Integer::intValue)
                 .toArray();
         return prices;
     }
 
-
-    public void addNewCarModel(Car.Model model) throws DuplicateModelNameException {
+    public void addNewBikeModel(Bike.Model model) throws DuplicateModelNameException {
         List<String> namesList = Arrays.stream(this.getNamesOfModels()).toList();
         if (namesList.contains(model.getModelName())) {
             throw new DuplicateModelNameException("We already have this model", model.getModelName());
         }
-        Model[] models = Arrays.copyOf(array, array.length + 1);
-        models[models.length - 1] = model;
-        this.setLength(this.getLength() + 1);
-        this.setArray(models);
+        list.add(model);
+        this.setSize(this.getSizeLinkedList());
     }
 
     public void deleteModel(String name) throws NoSuchModelNameException {
@@ -114,32 +107,52 @@ public class Car implements Vehicle, Serializable {
         if (!namesList.contains(name)) {
             throw new NoSuchModelNameException("We don't have this model", name);
         }
-        int index = -1;
-        for (int i = 0; i < array.length; i++) {
-            if (array[i].getModelName().equals(name)) {
-                index = i;
+        Iterator<Bike.Model> iterator = list.iterator();
+        while (iterator.hasNext()) {
+            Bike.Model modelBike = iterator.next();
+            if (modelBike.getModelName().equals(name)) {
+                iterator.remove();
             }
         }
-        Model[] newArray = new Model[array.length - 1];
-        System.arraycopy(array, 0, newArray, 0, index);
-        System.arraycopy(array, index + 1, newArray, index, array.length - 1 - index);
-        this.setLength(this.getLength() - 1);
-        this.setArray(newArray);
+        this.setSize(this.getSizeLinkedList());
     }
 
-    public int getSizeArrayModels() {
-        return this.getArray().length;
+    public int getSizeLinkedList() {
+        return list.size();
     }
-
 
     @Override
     public String toString() {
         StringBuffer buffer = new StringBuffer();
-        buffer.append("Car:brand= ").append(brand).append(", ").append("Car:count of models= ").append(length);
+        buffer.append("Bike:brand= ").append(brand).append(", ").append("Bike:count of models= ").append(size);
         return buffer.toString();
     }
 
-    public class Model {
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null) return false;
+        if (o instanceof Vehicle) {
+            Bike bike = (Bike) o;
+            return Objects.equals(brand, bike.brand) && Arrays.equals(getNamesOfModels(), bike.getNamesOfModels())
+                    && Arrays.equals(getPricesOfModels(), bike.getPricesOfModels());
+        }
+        return false;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = Objects.hash(brand);
+        result = 31 * result + Arrays.hashCode(getNamesOfModels()) + Arrays.hashCode(getPricesOfModels());
+        return result;
+    }
+
+    @Override
+    public Bike clone() throws CloneNotSupportedException {
+        return (Bike) super.clone();
+    }
+
+    public class Model implements Serializable, Cloneable {
         private String modelName;
         private int price;
 
@@ -167,8 +180,14 @@ public class Car implements Vehicle, Serializable {
         @Override
         public String toString() {
             StringBuffer buffer = new StringBuffer();
-            buffer.append("Car:model= ").append(modelName).append(", ").append("Car:price= ").append(price);
+            buffer.append("Bike:model= ").append(modelName).append(", ").append("Bike:price= ").append(price);
             return buffer.toString();
+        }
+
+        @Override
+        public Bike.Model clone() throws CloneNotSupportedException {
+            return (Bike.Model) super.clone();
         }
     }
 }
+

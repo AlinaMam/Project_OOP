@@ -1,4 +1,4 @@
-package org.example.lab2_3;
+package org.example.lab2_3_4;
 
 public interface Vehicle {
     void changeModelName(String oldName, String newName) throws NoSuchModelNameException;

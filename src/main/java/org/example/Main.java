@@ -1,8 +1,7 @@
 package org.example;
 
-import org.example.lab2_3.*;
+import org.example.lab2_3_4.*;
 
-import java.io.*;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.LinkedList;
@@ -60,10 +59,10 @@ public class Main {
         Bike.Model model5 = bike.new Model("ky301", 2_900_000);
         Bike.Model model6 = bike.new Model("ky302", 3_900_000);
         Bike.Model model7 = bike.new Model("ky308", 3_420_000);
+        bike.addNewBikeModel(model4);
         bike.addNewBikeModel(model5);
         bike.addNewBikeModel(model6);
         bike.addNewBikeModel(model7);
-        bike.addNewBikeModel(model4);
         System.out.println(bike.getList());
         bike.deleteModel("ky11");
         bike.deleteModel("ky308");
@@ -152,5 +151,69 @@ public class Main {
         Vehicle bikeNew = Util.deserializeBike();
         System.out.println(carNew);
         System.out.println(bikeNew);
+
+       /* //Лабораторная работа №4
+        //Создадим ещё один car и воспользуемся методами equals и hashcode
+        Car car1 = new Car("JAK", 3);
+        Car.Model[] arrayModels1 = {
+                car1.new Model("i30", 5_000_000),
+                car1.new Model("i20", 4_000_000),
+                car1.new Model("i10", 3_500_000)
+        };
+        car1.setArray(arrayModels1);
+        System.out.println(Arrays.toString(car1.getArray()));
+        car1.changeModelName("i20", "i35");
+        System.out.println(Arrays.toString(car1.getArray()));
+        System.out.println(Arrays.toString(car1.getNamesOfModels()));
+        System.out.println(car1.getPriceOfModelName("i35"));
+        car1.changeModelPrice("i35", 4_700_000);
+        System.out.println(Arrays.toString(car1.getArray()));
+        System.out.println(Arrays.toString(car1.getPricesOfModels()));
+        Car.Model model10 = car.new Model("i40", 3_800_000);
+        Car.Model model11 = car.new Model("i55", 3_750_000);
+        car1.addNewCarModel(model10);
+        car1.addNewCarModel(model11);
+        System.out.println(Arrays.toString(car1.getArray()));
+        car1.deleteModel("i35");
+        System.out.println(Arrays.toString(car1.getArray()));
+        System.out.println(car1.getSizeArrayModels());
+
+        System.out.println(car.equals(car1));
+        System.out.println(car.hashCode());
+        System.out.println(car1.hashCode());
+
+        //Создадим ещё один bike и воспользуемся методами equals и hashcode
+        Bike bike1 = new Bike("BMW", 3);
+        Bike.Model model20 = bike1.new Model("ky10", 1_700_000);
+        Bike.Model model21 = bike1.new Model("ky11", 1_800_000);
+        Bike.Model model22 = bike1.new Model("ky12", 1_900_300);
+        LinkedList<Bike.Model> list1 = new LinkedList<>();
+        Collections.addAll(list1, model20, model21, model22);
+        bike1.setList(list1);
+        System.out.println(bike1.getList());
+        bike1.changeModelName("ky10", "ky200");
+        System.out.println(bike1.getList());
+        System.out.println(Arrays.toString(bike1.getNamesOfModels()));
+        System.out.println(bike1.getPriceOfModelName("ky12"));
+        bike1.changeModelPrice("ky12", 2_000_000);
+        System.out.println(bike1.getList());
+        System.out.println(Arrays.toString(bike1.getPricesOfModels()));
+        Bike.Model model23 = bike1.new Model("ky300", 2_700_000);
+        Bike.Model model24 = bike1.new Model("ky301", 2_900_000);
+        Bike.Model model25 = bike1.new Model("ky302", 3_900_000);
+        Bike.Model model26 = bike1.new Model("ky308", 3_420_000);
+        bike1.addNewBikeModel(model23);
+        bike1.addNewBikeModel(model24);
+        bike1.addNewBikeModel(model25);
+        bike1.addNewBikeModel(model26);
+        System.out.println(bike1.getList());
+        bike1.deleteModel("ky11");
+        bike1.deleteModel("ky308");
+        System.out.println(bike1.getList());
+        System.out.println(bike1.getSizeLinkedList());
+
+        System.out.println(bike.equals(bike1));
+        System.out.println(bike.hashCode());
+        System.out.println(bike1.hashCode());*/
     }
 }
