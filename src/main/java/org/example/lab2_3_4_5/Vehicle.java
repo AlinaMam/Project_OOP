@@ -1,4 +1,4 @@
-package org.example.lab2_3_4;
+package org.example.lab2_3_4_5;
 
 public interface Vehicle {
     void changeModelName(String oldName, String newName) throws NoSuchModelNameException;
@@ -16,6 +16,9 @@ public interface Vehicle {
     }
 
     default void addNewBikeModel(Bike.Model model) throws DuplicateModelNameException {
+
+    }
+    default void addNewScooterModel(Scooter.Model model) throws DuplicateModelNameException {
 
     }
 

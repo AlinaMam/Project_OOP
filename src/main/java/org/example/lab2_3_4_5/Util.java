@@ -1,6 +1,8 @@
-package org.example.lab2_3_4;
+package org.example.lab2_3_4_5;
 
 import java.io.*;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import java.math.BigDecimal;
 import java.math.MathContext;
 import java.math.RoundingMode;
@@ -106,7 +108,7 @@ public class Util {
                 numModels--;
             }
             String[] model = models.stream().toArray(String[]::new);
-            System.out.println(Arrays.toString(model));
+//            System.out.println(Arrays.toString(model));
 
             List<Integer> prices = new ArrayList<>();
             while (numPrice > 0) {
@@ -114,7 +116,7 @@ public class Util {
                 numPrice--;
             }
             int[] price = prices.stream().mapToInt(Integer::intValue).toArray();
-            System.out.println(Arrays.toString(price));
+//            System.out.println(Arrays.toString(price));
 
             car = new Car(brand, countModels);
 
@@ -143,7 +145,7 @@ public class Util {
                 numModels--;
             }
             String[] model = models.stream().toArray(String[]::new);
-            System.out.println(Arrays.toString(model));
+//            System.out.println(Arrays.toString(model));
 
             List<Integer> prices = new ArrayList<>();
             while (numPrice > 0) {
@@ -151,7 +153,7 @@ public class Util {
                 numPrice--;
             }
             int[] price = prices.stream().mapToInt(Integer::intValue).toArray();
-            System.out.println(Arrays.toString(price));
+//            System.out.println(Arrays.toString(price));
 
             bike = new Bike(brand, countModels);
 
@@ -282,6 +284,7 @@ public class Util {
         }
         return car;
     }
+
     public static Vehicle deserializeBike() {
         Vehicle bike = null;
         try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream("object.txt"))) {
@@ -295,5 +298,29 @@ public class Util {
             e.printStackTrace();
         }
         return bike;
+    }
+
+    public static Car createCar(String brand, int length, Vehicle vehicle) throws NoSuchMethodException {
+        Class clazz = null;
+        Car car = null;
+        clazz = vehicle.getClass();
+        Constructor[] constructors = clazz.getConstructors();
+        for (Constructor constructor : constructors) {
+            Class[] parameterTypes = constructor.getParameterTypes();
+            for (int i = 0; i < parameterTypes.length; i++) {
+                if (!parameterTypes[0].getSimpleName().equals("String") && !parameterTypes[1].getSimpleName().equals("int")) {
+                    return null;
+                } else {
+                    Class[] catClassParams = {String.class, int.class};
+                    try {
+                        car = (Car) clazz.getConstructor(catClassParams).newInstance(brand, length);
+                        return car;
+                    } catch (InstantiationException | IllegalAccessException | InvocationTargetException e) {
+
+                    }
+                }
+            }
+        }
+        return null;
     }
 }

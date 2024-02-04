@@ -1,4 +1,4 @@
-package org.example.lab2_3_4;
+package org.example.lab2_3_4_5;
 
 public class ModelPriceOutOfBoundsException extends Exception {
     private int price;
