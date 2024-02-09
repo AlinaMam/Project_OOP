@@ -19,6 +19,8 @@ public class Car implements Vehicle, Serializable, Cloneable {
 
     public Car(String brand, int lengthArray) {
         this.brand = brand;
+        lengthArray = 1;
+        this.lengthArray = lengthArray;
         array = new Model[lengthArray];
     }
 

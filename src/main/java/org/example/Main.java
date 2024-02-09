@@ -33,6 +33,7 @@ public class Main {
         car.addNewModel("i1", 3_750_000);
         car.addNewModel("i2", 4_000_000);
         car.addNewModel("i3", 3_770_000);
+        System.out.println(car.getLengthArray());
 
         System.out.println("---");
 
