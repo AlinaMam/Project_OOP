@@ -1,8 +1,16 @@
-package org.example.lab2_3_4_5;
+package org.example.lab2_3_4_5.vehicle;
 
+import org.example.lab2_3_4_5.exception.DuplicateModelNameException;
+import org.example.lab2_3_4_5.Vehicle;
+import org.example.lab2_3_4_5.exception.IncorrectModelNameVehicle;
+import org.example.lab2_3_4_5.exception.IncorrectPriceVehicle;
+import org.example.lab2_3_4_5.exception.ModelPriceOutOfBoundsException;
+import org.example.lab2_3_4_5.exception.NoSuchModelNameException;
+
+import java.io.Serializable;
 import java.util.*;
 
-public class Scooter implements Vehicle {
+public class Scooter implements Vehicle, Serializable, Cloneable {
     private String brand;
     private Map<String, Integer> map;
     private int size;
@@ -10,6 +18,7 @@ public class Scooter implements Vehicle {
     public Scooter(String brand, int size) {
         this.brand = brand;
         this.size = size;
+        map = new HashMap<>();
     }
 
     public String getBrand() {
@@ -106,12 +115,18 @@ public class Scooter implements Vehicle {
     }
 
     @Override
-    public void addNewScooterModel(Model model) throws DuplicateModelNameException {
-        List<String> namesList = Arrays.stream(this.getNamesOfModels()).toList();
-        if (namesList.contains(model.getModelName())) {
-            throw new DuplicateModelNameException("We already have this model", model.getModelName());
+    public void addNewModel(String name, int price) throws DuplicateModelNameException, IncorrectPriceVehicle, IncorrectModelNameVehicle {
+        if (price <= 0) {
+            throw new IncorrectPriceVehicle("Price is les 0 equal 0", price);
+        } else if (name.equals(" ")) {
+            throw new IncorrectModelNameVehicle("Model name is empty o null", name);
         }
-        map.put(model.getModelName(), model.getPrice());
+        for (var pair : this.map.entrySet()) {
+            if (pair.getKey().equals(name)) {
+                throw new DuplicateModelNameException("We already have this model", name);
+            }
+        }
+        map.put(name, price);
         this.setSize(this.getSizeHashMap());
     }
 
@@ -122,7 +137,7 @@ public class Scooter implements Vehicle {
             throw new NoSuchModelNameException("We don't have this model", name);
         }
         Map<String, Integer> mapClone = new HashMap<>(map);
-        for (var pair:mapClone.entrySet()) {
+        for (var pair : mapClone.entrySet()) {
             if (pair.getKey().equals(name)) {
                 map.remove(pair.getKey());
             }
@@ -134,12 +149,13 @@ public class Scooter implements Vehicle {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null) return false;
-        if (o instanceof Vehicle) {
+        if (o instanceof Scooter) {
             Scooter scooter = (Scooter) o;
-            return Objects.equals(brand, scooter.brand) && Arrays.equals(getNamesOfModels(), scooter.getNamesOfModels())
-                    && Arrays.equals(getPricesOfModels(), scooter.getPricesOfModels());
+            if (!scooter.brand.equals(this.brand) || scooter.getSizeHashMap() != this.getSizeHashMap()) {
+                return false;
+            } else return scooter.map.equals(this.map);
         }
-        return false;
+        return true;
     }
 
     @Override
@@ -156,7 +172,15 @@ public class Scooter implements Vehicle {
         return buffer.toString();
     }
 
-    public class Model {
+    @Override
+    public Scooter clone() throws CloneNotSupportedException {
+        Scooter newScooter = (Scooter) super.clone();
+        Map<String, Integer> newMap = new HashMap<>(this.map);
+        newScooter.setMap(newMap);
+        return newScooter;
+    }
+
+    public class Model implements Serializable, Cloneable {
         private String modelName;
         private int price;
 
@@ -186,6 +210,10 @@ public class Scooter implements Vehicle {
             StringBuffer buffer = new StringBuffer();
             buffer.append("Scooter:model= ").append(modelName).append(", ").append("Scooter:price= ").append(price);
             return buffer.toString();
+        }
+        @Override
+        public Scooter.Model clone() throws CloneNotSupportedException {
+            return (Scooter.Model) super.clone();
         }
     }
 }

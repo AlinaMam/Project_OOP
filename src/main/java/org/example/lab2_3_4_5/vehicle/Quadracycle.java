@@ -1,16 +1,24 @@
-package org.example.lab2_3_4_5;
+package org.example.lab2_3_4_5.vehicle;
+
+import org.example.lab2_3_4_5.exception.DuplicateModelNameException;
+import org.example.lab2_3_4_5.Vehicle;
+import org.example.lab2_3_4_5.exception.IncorrectModelNameVehicle;
+import org.example.lab2_3_4_5.exception.IncorrectPriceVehicle;
+import org.example.lab2_3_4_5.exception.ModelPriceOutOfBoundsException;
+import org.example.lab2_3_4_5.exception.NoSuchModelNameException;
 
 import java.io.Serializable;
 import java.util.*;
 
-public class Bike implements Vehicle, Serializable, Cloneable {
+public class Quadracycle implements Vehicle, Serializable, Cloneable {
     private String brand;
-    private LinkedList<Bike.Model> list;
+    private ArrayList<Quadracycle.Model> list;
     private int size;
 
-    public Bike(String brand, int size) {
+    public Quadracycle(String brand, int size) {
         this.brand = brand;
         this.size = size;
+        list = new ArrayList<>();
     }
 
     public String getBrand() {
@@ -21,11 +29,11 @@ public class Bike implements Vehicle, Serializable, Cloneable {
         this.brand = brand;
     }
 
-    public LinkedList<Model> getList() {
+    public ArrayList<Quadracycle.Model> getList() {
         return list;
     }
 
-    public void setList(LinkedList<Bike.Model> list) {
+    public void setList(ArrayList<Quadracycle.Model> list) {
         this.list = list;
     }
 
@@ -36,35 +44,39 @@ public class Bike implements Vehicle, Serializable, Cloneable {
     public void setSize(int size) {
         this.size = size;
     }
-    public int getSizeLinkedList() {
+
+    public int getSizeArrayList() {
         return list.size();
     }
 
+    @Override
     public void changeModelName(String oldName, String newName) throws NoSuchModelNameException {
         List<String> namesList = Arrays.stream(this.getNamesOfModels()).toList();
         if (!namesList.contains(oldName)) {
             throw new NoSuchModelNameException("We don't have this model", oldName);
         }
-        for (Bike.Model model : list) {
+        for (Quadracycle.Model model : list) {
             if (model.getModelName().equals(oldName)) {
                 model.setModelName(newName);
             }
         }
     }
 
+    @Override
     public String[] getNamesOfModels() {
         String[] namesOfModels = list.stream()
-                .map(Bike.Model::getModelName)
+                .map(Quadracycle.Model::getModelName)
                 .toArray(String[]::new);
         return namesOfModels;
     }
 
+    @Override
     public int getPriceOfModelName(String name) throws NoSuchModelNameException {
         List<String> namesList = Arrays.stream(this.getNamesOfModels()).toList();
         if (!namesList.contains(name)) {
             throw new NoSuchModelNameException("We don't have this model", name);
         }
-        for (Bike.Model model : list) {
+        for (Quadracycle.Model model : list) {
             if (model.getModelName().equals(name)) {
                 return model.getPrice();
             }
@@ -72,6 +84,7 @@ public class Bike implements Vehicle, Serializable, Cloneable {
         return 0;
     }
 
+    @Override
     public void changeModelPrice(String name, int newPrice) throws ModelPriceOutOfBoundsException, NoSuchModelNameException {
         if (newPrice <= 0) {
             throw new ModelPriceOutOfBoundsException("Price must be more than zero", newPrice);
@@ -80,62 +93,81 @@ public class Bike implements Vehicle, Serializable, Cloneable {
         if (!namesList.contains(name)) {
             throw new NoSuchModelNameException("We don't have this model", name);
         }
-        for (Bike.Model model : list) {
+        for (Quadracycle.Model model : list) {
             if (model.getModelName().equals(name)) {
                 model.setPrice(newPrice);
             }
         }
     }
 
+    @Override
     public int[] getPricesOfModels() {
         int[] prices = list.stream()
-                .map(Bike.Model::getPrice)
+                .map(Quadracycle.Model::getPrice)
                 .mapToInt(Integer::intValue)
                 .toArray();
         return prices;
     }
 
-    public void addNewBikeModel(Bike.Model model) throws DuplicateModelNameException {
-        List<String> namesList = Arrays.stream(this.getNamesOfModels()).toList();
-        if (namesList.contains(model.getModelName())) {
-            throw new DuplicateModelNameException("We already have this model", model.getModelName());
+    @Override
+    public void addNewModel(String name, int price) throws DuplicateModelNameException, IncorrectPriceVehicle, IncorrectModelNameVehicle {
+        if (price <= 0) {
+            throw new IncorrectPriceVehicle("Price is les 0 equal 0", price);
+        } else if (name.equals(" ")) {
+            throw new IncorrectModelNameVehicle("Model name is empty o null", name);
         }
-        list.add(model);
-        this.setSize(this.getSizeLinkedList());
+
+        for (int i = 0; i < this.list.size(); i++) {
+            if (this.list.get(i).getModelName().equals(name)) {
+                throw new DuplicateModelNameException("We already have this model", name);
+            }
+        }
+        Model model = new Model(name, price);
+        this.list.add(model);
+        this.setSize(this.getSizeArrayList());
     }
 
-    public void deleteModel(String name) throws NoSuchModelNameException {
+    @Override
+    public void deleteModel(String name) throws NoSuchModelNameException, IncorrectModelNameVehicle {
         List<String> namesList = Arrays.stream(this.getNamesOfModels()).toList();
         if (!namesList.contains(name)) {
             throw new NoSuchModelNameException("We don't have this model", name);
         }
-        Iterator<Bike.Model> iterator = list.iterator();
+        Iterator<Quadracycle.Model> iterator = list.iterator();
         while (iterator.hasNext()) {
-            Bike.Model modelBike = iterator.next();
-            if (modelBike.getModelName().equals(name)) {
+            Model modelQuadracycle = iterator.next();
+            if (modelQuadracycle.getModelName().equals(name)) {
                 iterator.remove();
             }
         }
-        this.setSize(this.getSizeLinkedList());
+        this.setSize(this.getSizeArrayList());
     }
-
     @Override
     public String toString() {
         StringBuffer buffer = new StringBuffer();
-        buffer.append("Bike:brand= ").append(brand).append(", ").append("Bike:count of models= ").append(size);
+        buffer.append("Quadracycle:brand= ").append(brand).append(", ").append("Quadracycle:count of models= ").append(size);
         return buffer.toString();
     }
+
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null) return false;
-        if (o instanceof Vehicle) {
-            Bike bike = (Bike) o;
-            return Objects.equals(brand, bike.brand) && Arrays.equals(getNamesOfModels(), bike.getNamesOfModels())
-                    && Arrays.equals(getPricesOfModels(), bike.getPricesOfModels());
+        if (o instanceof Quadracycle) {
+            Quadracycle quadracycle = (Quadracycle) o;
+            if (!quadracycle.brand.equals(this.brand) || quadracycle.getSizeArrayList() != this.getSizeArrayList()) {
+                return false;
+            }
+            for (int i = 0; i < this.getSizeArrayList(); i++) {
+                if (!quadracycle.list.get(i).getModelName().equals(this.list.get(i).getModelName())) {
+                    return false;
+                } else if (quadracycle.list.get(i).getPrice() != this.list.get(i).getPrice()) {
+                    return false;
+                }
+            }
         }
-        return false;
+        return true;
     }
 
     @Override
@@ -146,8 +178,14 @@ public class Bike implements Vehicle, Serializable, Cloneable {
     }
 
     @Override
-    public Bike clone() throws CloneNotSupportedException {
-        return (Bike) super.clone();
+    public Quadracycle clone() throws CloneNotSupportedException {
+        Quadracycle newQuadracycle = (Quadracycle) super.clone();
+        ArrayList<Quadracycle.Model> newList = new ArrayList<>();
+        for (Model model : list) {
+            newList.add(model.clone());
+        }
+        newQuadracycle.setList(newList);
+        return newQuadracycle;
     }
 
     public class Model implements Serializable, Cloneable {
@@ -178,14 +216,13 @@ public class Bike implements Vehicle, Serializable, Cloneable {
         @Override
         public String toString() {
             StringBuffer buffer = new StringBuffer();
-            buffer.append("Bike:model= ").append(modelName).append(", ").append("Bike:price= ").append(price);
+            buffer.append("Quadracycle:model= ").append(modelName).append(", ").append("Quadracycle:price= ").append(price);
             return buffer.toString();
         }
 
         @Override
-        public Bike.Model clone() throws CloneNotSupportedException {
-            return (Bike.Model) super.clone();
+        public Quadracycle.Model clone() throws CloneNotSupportedException {
+            return (Quadracycle.Model) super.clone();
         }
     }
 }
-

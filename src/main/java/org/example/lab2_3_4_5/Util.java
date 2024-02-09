@@ -1,5 +1,7 @@
 package org.example.lab2_3_4_5;
 
+import org.example.lab2_3_4_5.vehicle.*;
+
 import java.io.*;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
@@ -9,6 +11,7 @@ import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Scanner;
 
 public class Util {
     public static void averagePrice(Vehicle vehicle) {
@@ -29,6 +32,33 @@ public class Util {
             MathContext context = new MathContext(9, RoundingMode.HALF_UP);
             BigDecimal result = new BigDecimal(avgPriceCar, context);
             System.out.println("Average price of bike: " + result);
+
+        } else if (vehicle instanceof Scooter) {
+            int[] pricesOfModels = vehicle.getPricesOfModels();
+            double avgPriceScooter = Arrays.stream(pricesOfModels)
+                    .average()
+                    .getAsDouble();
+            MathContext context = new MathContext(9, RoundingMode.HALF_UP);
+            BigDecimal result = new BigDecimal(avgPriceScooter, context);
+            System.out.println("Average price of scooter: " + result);
+
+        } else if (vehicle instanceof Quadracycle) {
+            int[] pricesOfModels = vehicle.getPricesOfModels();
+            double avgPriceScooter = Arrays.stream(pricesOfModels)
+                    .average()
+                    .getAsDouble();
+            MathContext context = new MathContext(9, RoundingMode.HALF_UP);
+            BigDecimal result = new BigDecimal(avgPriceScooter, context);
+            System.out.println("Average price of quadracycle: " + result);
+
+        } else if (vehicle instanceof Moped) {
+            int[] pricesOfModels = vehicle.getPricesOfModels();
+            double avgPriceScooter = Arrays.stream(pricesOfModels)
+                    .average()
+                    .getAsDouble();
+            MathContext context = new MathContext(9, RoundingMode.HALF_UP);
+            BigDecimal result = new BigDecimal(avgPriceScooter, context);
+            System.out.println("Average price of moped: " + result);
         }
     }
 
@@ -39,6 +69,15 @@ public class Util {
         } else if (vehicle instanceof Bike) {
             String[] namesOfModels = vehicle.getNamesOfModels();
             Arrays.stream(namesOfModels).toList().forEach(s -> System.out.println("Name of model bike: " + s));
+        } else if (vehicle instanceof Scooter) {
+            String[] namesOfModels = vehicle.getNamesOfModels();
+            Arrays.stream(namesOfModels).toList().forEach(s -> System.out.println("Name of model scooter: " + s));
+        } else if (vehicle instanceof Quadracycle) {
+            String[] namesOfModels = vehicle.getNamesOfModels();
+            Arrays.stream(namesOfModels).toList().forEach(s -> System.out.println("Name of model quadracycle: " + s));
+        } else if (vehicle instanceof Moped) {
+            String[] namesOfModels = vehicle.getNamesOfModels();
+            Arrays.stream(namesOfModels).toList().forEach(s -> System.out.println("Name of model moped: " + s));
         }
     }
 
@@ -46,7 +85,7 @@ public class Util {
         if (vehicle instanceof Car) {
             Car car = (Car) vehicle;
             String brand = car.getBrand();
-            int countModels = car.getSizeArrayModels();
+            int countModels = car.getLengthArray();
             String[] namesOfModels = car.getNamesOfModels();
             int[] pricesOfModels = car.getPricesOfModels();
             try {
@@ -91,12 +130,84 @@ public class Util {
                     e.printStackTrace();
                 }
             }
-
+        } else if (vehicle instanceof Scooter) {
+            Scooter scooter = (Scooter) vehicle;
+            String brand = scooter.getBrand();
+            int countModels = scooter.getSizeHashMap();
+            String[] namesOfModels = scooter.getNamesOfModels();
+            int[] pricesOfModels = scooter.getPricesOfModels();
+            try {
+                ((DataOutputStream) out).writeUTF(brand);
+                ((DataOutputStream) out).writeInt(countModels);
+                for (String line : namesOfModels) {
+                    ((DataOutputStream) out).writeUTF(line);
+                }
+                for (int price : pricesOfModels) {
+                    ((DataOutputStream) out).writeInt(price);
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            } finally {
+                try {
+                    out.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        } else if (vehicle instanceof Quadracycle) {
+            Quadracycle quadracycle = (Quadracycle) vehicle;
+            String brand = quadracycle.getBrand();
+            int countModels = quadracycle.getSizeArrayList();
+            String[] namesOfModels = quadracycle.getNamesOfModels();
+            int[] pricesOfModels = quadracycle.getPricesOfModels();
+            try {
+                ((DataOutputStream) out).writeUTF(brand);
+                ((DataOutputStream) out).writeInt(countModels);
+                for (String line : namesOfModels) {
+                    ((DataOutputStream) out).writeUTF(line);
+                }
+                for (int price : pricesOfModels) {
+                    ((DataOutputStream) out).writeInt(price);
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            } finally {
+                try {
+                    out.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        } else if (vehicle instanceof Moped) {
+            Moped moped = (Moped) vehicle;
+            String brand = moped.getBrand();
+            int countModels = moped.getSizeLinkedList();
+            String[] namesOfModels = moped.getNamesOfModels();
+            int[] pricesOfModels = moped.getPricesOfModels();
+            try {
+                ((DataOutputStream) out).writeUTF(brand);
+                ((DataOutputStream) out).writeInt(countModels);
+                for (String line : namesOfModels) {
+                    ((DataOutputStream) out).writeUTF(line);
+                }
+                for (int price : pricesOfModels) {
+                    ((DataOutputStream) out).writeInt(price);
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            } finally {
+                try {
+                    out.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
         }
     }
 
     public static Vehicle inputCar(InputStream in) {
         Vehicle car = null;
+        //пример с использованием DataInputStream
         try {
             String brand = ((DataInputStream) in).readUTF();
             int countModels = ((DataInputStream) in).readInt();
@@ -108,7 +219,6 @@ public class Util {
                 numModels--;
             }
             String[] model = models.stream().toArray(String[]::new);
-//            System.out.println(Arrays.toString(model));
 
             List<Integer> prices = new ArrayList<>();
             while (numPrice > 0) {
@@ -116,7 +226,6 @@ public class Util {
                 numPrice--;
             }
             int[] price = prices.stream().mapToInt(Integer::intValue).toArray();
-//            System.out.println(Arrays.toString(price));
 
             car = new Car(brand, countModels);
 
@@ -145,7 +254,6 @@ public class Util {
                 numModels--;
             }
             String[] model = models.stream().toArray(String[]::new);
-//            System.out.println(Arrays.toString(model));
 
             List<Integer> prices = new ArrayList<>();
             while (numPrice > 0) {
@@ -153,7 +261,6 @@ public class Util {
                 numPrice--;
             }
             int[] price = prices.stream().mapToInt(Integer::intValue).toArray();
-//            System.out.println(Arrays.toString(price));
 
             bike = new Bike(brand, countModels);
 
@@ -168,6 +275,112 @@ public class Util {
         }
         return bike;
     }
+
+    public static Vehicle inputScooter(InputStream in) {
+        Vehicle scooter = null;
+        try {
+            String brand = ((DataInputStream) in).readUTF();
+            int countModels = ((DataInputStream) in).readInt();
+            int numModels = countModels;
+            int numPrice = countModels;
+            List<String> models = new ArrayList<>();
+            while (numModels > 0) {
+                models.add(((DataInputStream) in).readUTF());
+                numModels--;
+            }
+            String[] model = models.stream().toArray(String[]::new);
+
+            List<Integer> prices = new ArrayList<>();
+            while (numPrice > 0) {
+                prices.add(((DataInputStream) in).readInt());
+                numPrice--;
+            }
+            int[] price = prices.stream().mapToInt(Integer::intValue).toArray();
+
+            scooter = new Scooter(brand, countModels);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                in.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        return scooter;
+    }
+
+    public static Vehicle inputQuadracycle(InputStream in) {
+        Vehicle quadracycle = null;
+        try {
+            String brand = ((DataInputStream) in).readUTF();
+            int countModels = ((DataInputStream) in).readInt();
+            int numModels = countModels;
+            int numPrice = countModels;
+            List<String> models = new ArrayList<>();
+            while (numModels > 0) {
+                models.add(((DataInputStream) in).readUTF());
+                numModels--;
+            }
+            String[] model = models.stream().toArray(String[]::new);
+
+            List<Integer> prices = new ArrayList<>();
+            while (numPrice > 0) {
+                prices.add(((DataInputStream) in).readInt());
+                numPrice--;
+            }
+            int[] price = prices.stream().mapToInt(Integer::intValue).toArray();
+
+            quadracycle = new Quadracycle(brand, countModels);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                in.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        return quadracycle;
+    }
+
+    public static Vehicle inputMoped(InputStream in) {
+        Vehicle moped = null;
+        try {
+            String brand = ((DataInputStream) in).readUTF();
+            int countModels = ((DataInputStream) in).readInt();
+            int numModels = countModels;
+            int numPrice = countModels;
+            List<String> models = new ArrayList<>();
+            while (numModels > 0) {
+                models.add(((DataInputStream) in).readUTF());
+                numModels--;
+            }
+            String[] model = models.stream().toArray(String[]::new);
+
+            List<Integer> prices = new ArrayList<>();
+            while (numPrice > 0) {
+                prices.add(((DataInputStream) in).readInt());
+                numPrice--;
+            }
+            int[] price = prices.stream().mapToInt(Integer::intValue).toArray();
+
+            moped = new Moped(brand, countModels);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                in.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        return moped;
+    }
+
 
     public static void writeVehicle(Vehicle vehicle, Writer out) {
         if (vehicle instanceof Car) {
@@ -218,12 +431,93 @@ public class Util {
                     e.printStackTrace();
                 }
             }
+        } else if (vehicle instanceof Scooter) {
+            Scooter scooter = (Scooter) vehicle;
+            String brand = scooter.getBrand();
+            int countModels = scooter.getSizeHashMap();
+            String[] namesOfModels = scooter.getNamesOfModels();
+            int[] pricesOfModels = scooter.getPricesOfModels();
+            try {
+                out.write(brand + "\n");
+                out.write(countModels + "\n");
+                for (String line : namesOfModels) {
+                    out.write(line + "\n");
+                }
+                for (int price : pricesOfModels) {
+                    out.write(price + "\n");
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            } finally {
+                try {
+                    out.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        } else if (vehicle instanceof Quadracycle) {
+            Quadracycle quadracycle = (Quadracycle) vehicle;
+            String brand = quadracycle.getBrand();
+            int countModels = quadracycle.getSizeArrayList();
+            String[] namesOfModels = quadracycle.getNamesOfModels();
+            int[] pricesOfModels = quadracycle.getPricesOfModels();
+            try {
+                out.write(brand + "\n");
+                out.write(countModels + "\n");
+                for (String line : namesOfModels) {
+                    out.write(line + "\n");
+                }
+                for (int price : pricesOfModels) {
+                    out.write(price + "\n");
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            } finally {
+                try {
+                    out.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        } else if (vehicle instanceof Moped) {
+            Moped moped = (Moped) vehicle;
+            String brand = moped.getBrand();
+            int countModels = moped.getSizeLinkedList();
+            String[] namesOfModels = moped.getNamesOfModels();
+            int[] pricesOfModels = moped.getPricesOfModels();
+            try {
+                out.write(brand + "\n");
+                out.write(countModels + "\n");
+                for (String line : namesOfModels) {
+                    out.write(line + "\n");
+                }
+                for (int price : pricesOfModels) {
+                    out.write(price + "\n");
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            } finally {
+                try {
+                    out.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
         }
     }
 
-    public static Vehicle readCar(Reader in) {
+    public static Vehicle readCar(Scanner scanner) {
+        //чтение Scanner-ом
         Vehicle car = null;
-        StringBuilder builder = new StringBuilder();
+        try {
+            String brand = scanner.next();
+            int countModels = scanner.nextInt();
+            car = new Car(brand, countModels);
+        } finally {
+            scanner.close();
+        }
+        //чтение BufferedReader-ом
+       /* StringBuilder builder = new StringBuilder();
         try {
             int num;
             while ((num = in.read()) != -1) {
@@ -236,7 +530,7 @@ public class Util {
             }
         } catch (IOException e) {
             e.printStackTrace();
-        }
+        }*/
         return car;
     }
 
@@ -259,10 +553,68 @@ public class Util {
         return bike;
     }
 
-    public static void serializeVehicle(Vehicle car, Vehicle bike) {
+    public static Vehicle readScooter(Reader in) {
+        Vehicle scooter = null;
+        StringBuilder builder = new StringBuilder();
+        try {
+            int num;
+            while ((num = in.read()) != -1) {
+                builder.append((char) num);
+            }
+            String line = new String(builder);
+            String[] buffer = line.split("\n");
+            for (int i = 0; i < buffer.length; i++) {
+                scooter = new Scooter(buffer[0], Integer.parseInt(buffer[1]));
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return scooter;
+    }
+
+    public static Vehicle readQuadracycle(Reader in) {
+        Vehicle quadracycle = null;
+        StringBuilder builder = new StringBuilder();
+        try {
+            int num;
+            while ((num = in.read()) != -1) {
+                builder.append((char) num);
+            }
+            String line = new String(builder);
+            String[] buffer = line.split("\n");
+            for (int i = 0; i < buffer.length; i++) {
+                quadracycle = new Quadracycle(buffer[0], Integer.parseInt(buffer[1]));
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return quadracycle;
+    }
+
+    public static Vehicle readMoped(Reader in) {
+        Vehicle moped = null;
+        StringBuilder builder = new StringBuilder();
+        try {
+            int num;
+            while ((num = in.read()) != -1) {
+                builder.append((char) num);
+            }
+            String line = new String(builder);
+            String[] buffer = line.split("\n");
+            for (int i = 0; i < buffer.length; i++) {
+                moped = new Moped(buffer[0], Integer.parseInt(buffer[1]));
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return moped;
+    }
+
+    public static void serializeVehicle(Vehicle... vehicle) {
         List<Serializable> objects = new ArrayList<>();
-        objects.add((Serializable) car);
-        objects.add((Serializable) bike);
+        for (int i = 0; i < vehicle.length; i++) {
+            objects.add((Serializable) vehicle[i]);
+        }
         try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream("object.txt"))) {
             oos.writeObject(objects);
         } catch (IOException e) {
@@ -300,27 +652,54 @@ public class Util {
         return bike;
     }
 
-    public static Car createCar(String brand, int length, Vehicle vehicle) throws NoSuchMethodException {
-        Class clazz = null;
-        Car car = null;
-        clazz = vehicle.getClass();
-        Constructor[] constructors = clazz.getConstructors();
-        for (Constructor constructor : constructors) {
-            Class[] parameterTypes = constructor.getParameterTypes();
-            for (int i = 0; i < parameterTypes.length; i++) {
-                if (!parameterTypes[0].getSimpleName().equals("String") && !parameterTypes[1].getSimpleName().equals("int")) {
-                    return null;
-                } else {
-                    Class[] catClassParams = {String.class, int.class};
-                    try {
-                        car = (Car) clazz.getConstructor(catClassParams).newInstance(brand, length);
-                        return car;
-                    } catch (InstantiationException | IllegalAccessException | InvocationTargetException e) {
-
-                    }
+    public static Vehicle deserializeScooter() {
+        Vehicle scooter = null;
+        try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream("object.txt"))) {
+            List<Serializable> objects = (List<Serializable>) ois.readObject();
+            for (Serializable object : objects) {
+                if (object instanceof Scooter) {
+                    scooter = (Scooter) object;
                 }
             }
+        } catch (ClassNotFoundException | IOException e) {
+            e.printStackTrace();
         }
-        return null;
+        return scooter;
+    }
+
+    public static Vehicle deserializeQuadracycle() {
+        Vehicle quadracycle = null;
+        try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream("object.txt"))) {
+            List<Serializable> objects = (List<Serializable>) ois.readObject();
+            for (Serializable object : objects) {
+                if (object instanceof Quadracycle) {
+                    quadracycle = (Quadracycle) object;
+                }
+            }
+        } catch (ClassNotFoundException | IOException e) {
+            e.printStackTrace();
+        }
+        return quadracycle;
+    }
+
+    public static Vehicle deserializeMoped() {
+        Vehicle moped = null;
+        try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream("object.txt"))) {
+            List<Serializable> objects = (List<Serializable>) ois.readObject();
+            for (Serializable object : objects) {
+                if (object instanceof Moped) {
+                    moped = (Moped) object;
+                }
+            }
+        } catch (ClassNotFoundException | IOException e) {
+            e.printStackTrace();
+        }
+        return moped;
+    }
+
+    public static Vehicle createVehicle(String brand, int length, Vehicle vehicle) throws NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException {
+        Class clazz = vehicle.getClass();
+        Constructor constructor = clazz.getConstructor(String.class, int.class);
+        return (Vehicle) constructor.newInstance(brand, length);
     }
 }

@@ -1,5 +1,7 @@
 package org.example.lab2_3_4_5;
 
+import org.example.lab2_3_4_5.exception.*;
+
 public interface Vehicle {
     void changeModelName(String oldName, String newName) throws NoSuchModelNameException;
 
@@ -11,16 +13,8 @@ public interface Vehicle {
 
     int[] getPricesOfModels();
 
-    default void addNewCarModel(Car.Model model) throws DuplicateModelNameException {
+    void addNewModel(String name, int price) throws DuplicateModelNameException, IncorrectPriceVehicle, IncorrectModelNameVehicle;
 
-    }
+    void deleteModel(String name) throws NoSuchModelNameException, IncorrectModelNameVehicle;
 
-    default void addNewBikeModel(Bike.Model model) throws DuplicateModelNameException {
-
-    }
-    default void addNewScooterModel(Scooter.Model model) throws DuplicateModelNameException {
-
-    }
-
-    void deleteModel(String name) throws NoSuchModelNameException;
 }
