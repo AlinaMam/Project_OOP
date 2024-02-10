@@ -21,10 +21,12 @@ public class Scooter implements Vehicle, Serializable, Cloneable {
         map = new HashMap<>();
     }
 
+    @Override
     public String getBrand() {
         return brand;
     }
 
+    @Override
     public void setBrand(String brand) {
         this.brand = brand;
     }
@@ -37,15 +39,12 @@ public class Scooter implements Vehicle, Serializable, Cloneable {
         this.map = map;
     }
 
-    public int getSize() {
-        return size;
-    }
-
-    public void setSize(int size) {
+    public void setLength(int size) {
         this.size = size;
     }
 
-    public int getSizeHashMap() {
+    @Override
+    public int getLength() {
         return map.size();
     }
 
@@ -127,7 +126,7 @@ public class Scooter implements Vehicle, Serializable, Cloneable {
             }
         }
         map.put(name, price);
-        this.setSize(this.getSizeHashMap());
+        this.setLength(this.getLength());
     }
 
     @Override
@@ -142,7 +141,7 @@ public class Scooter implements Vehicle, Serializable, Cloneable {
                 map.remove(pair.getKey());
             }
         }
-        this.setSize(this.getSizeHashMap());
+        this.setLength(this.getLength());
     }
 
     @Override
@@ -151,7 +150,7 @@ public class Scooter implements Vehicle, Serializable, Cloneable {
         if (o == null) return false;
         if (o instanceof Scooter) {
             Scooter scooter = (Scooter) o;
-            if (!scooter.brand.equals(this.brand) || scooter.getSizeHashMap() != this.getSizeHashMap()) {
+            if (!scooter.brand.equals(this.brand) || scooter.getLength() != this.getLength()) {
                 return false;
             } else return scooter.map.equals(this.map);
         }
@@ -211,6 +210,7 @@ public class Scooter implements Vehicle, Serializable, Cloneable {
             buffer.append("Scooter:model= ").append(modelName).append(", ").append("Scooter:price= ").append(price);
             return buffer.toString();
         }
+
         @Override
         public Scooter.Model clone() throws CloneNotSupportedException {
             return (Scooter.Model) super.clone();

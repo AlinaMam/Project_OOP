@@ -21,10 +21,12 @@ public class Bike implements Vehicle, Serializable, Cloneable {
         list = new LinkedList<>();
     }
 
+    @Override
     public String getBrand() {
         return brand;
     }
 
+    @Override
     public void setBrand(String brand) {
         this.brand = brand;
     }
@@ -37,15 +39,12 @@ public class Bike implements Vehicle, Serializable, Cloneable {
         this.list = list;
     }
 
-    public int getSize() {
-        return size;
-    }
-
-    public void setSize(int size) {
+    public void setLength(int size) {
         this.size = size;
     }
 
-    public int getSizeLinkedList() {
+    @Override
+    public int getLength() {
         return list.size();
     }
 
@@ -119,7 +118,7 @@ public class Bike implements Vehicle, Serializable, Cloneable {
         }
         Model model = new Model(name, price);
         this.list.add(model);
-        this.setSize(this.getSizeLinkedList());
+        this.setLength(this.getLength());
 
     }
 
@@ -135,7 +134,7 @@ public class Bike implements Vehicle, Serializable, Cloneable {
                 iterator.remove();
             }
         }
-        this.setSize(this.getSizeLinkedList());
+        this.setLength(this.getLength());
     }
 
     @Override
@@ -151,10 +150,10 @@ public class Bike implements Vehicle, Serializable, Cloneable {
         if (o == null) return false;
         if (o instanceof Bike) {
             Bike bike = (Bike) o;
-            if (!bike.brand.equals(this.brand) || bike.getSizeLinkedList() != this.getSizeLinkedList()) {
+            if (!bike.brand.equals(this.brand) || bike.getLength() != this.getLength()) {
                 return false;
             }
-            for (int i = 0; i < this.getSizeLinkedList(); i++) {
+            for (int i = 0; i < this.getLength(); i++) {
                 if (!bike.list.get(i).getModelName().equals(this.list.get(i).getModelName())) {
                     return false;
                 } else if (bike.list.get(i).getPrice() != this.list.get(i).getPrice()) {

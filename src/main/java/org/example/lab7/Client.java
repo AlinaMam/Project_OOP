@@ -15,33 +15,31 @@ import java.util.Arrays;
 import java.util.List;
 
 public class Client {
-    public static void main(String[] args) throws DuplicateModelNameException, IncorrectPriceVehicle, IncorrectModelNameVehicle, IOException {
-        Vehicle car = new Car("EXEED", 1);
-        car.addNewModel("i10", 2_900_000);
-        car.addNewModel("i20", 3_100_000);
-
-        Vehicle moped = new Moped("Vespa", 2);
-        moped.addNewModel("Primavera", 1_900_000);
-        moped.addNewModel("GTV", 2_500_000);
+    public static void main(String[] args) {
 
         int portNumber = 1777;
         double avg;
         System.out.println("Client is started");
 
-        Socket socket = new Socket("127.0.0.1", portNumber);
-        ObjectInputStream ois = new ObjectInputStream(socket.getInputStream());
-        ObjectOutputStream oos = new ObjectOutputStream(socket.getOutputStream());
+        try(Socket socket = new Socket("localhost", portNumber);
+            DataInputStream dis = new DataInputStream(socket.getInputStream());
+            ObjectOutputStream oos = new ObjectOutputStream(socket.getOutputStream())) {
 
-        List<Serializable> objects = new ArrayList<>();
-        objects.add((Serializable) car);
-        objects.add((Serializable) moped);
+            Vehicle[] vehicles = new Vehicle[2];
+            for (int i = 0; i < vehicles.length; i++) {
+                vehicles[i] = new Car("EXEED" + i, 2);
+                vehicles[i].addNewModel("i10", 1_800_000);
+                vehicles[i].addNewModel("i20", 1_900_000);
+            }
 
-        oos.writeObject(objects);
+            oos.writeObject(vehicles);
 
-        System.out.println("From server: " + ois.readDouble());
+            System.out.println("From server: " + dis.readDouble());
 
-        ois.close();
-        oos.close();
-        socket.close();
+        } catch (IOException e) {
+
+        } catch (DuplicateModelNameException | IncorrectPriceVehicle | IncorrectModelNameVehicle e) {
+            e.printStackTrace();
+        }
     }
 }

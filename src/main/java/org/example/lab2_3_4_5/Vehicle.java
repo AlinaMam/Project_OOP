@@ -3,6 +3,8 @@ package org.example.lab2_3_4_5;
 import org.example.lab2_3_4_5.exception.*;
 
 public interface Vehicle {
+    String getBrand();
+    void setBrand(String brand);
     void changeModelName(String oldName, String newName) throws NoSuchModelNameException;
 
     String[] getNamesOfModels();
@@ -16,5 +18,6 @@ public interface Vehicle {
     void addNewModel(String name, int price) throws DuplicateModelNameException, IncorrectPriceVehicle, IncorrectModelNameVehicle;
 
     void deleteModel(String name) throws NoSuchModelNameException, IncorrectModelNameVehicle;
+    int getLength();
 
 }

@@ -24,10 +24,12 @@ public class Car implements Vehicle, Serializable, Cloneable {
         array = new Model[lengthArray];
     }
 
+    @Override
     public String getBrand() {
         return brand;
     }
 
+    @Override
     public void setBrand(String brand) {
         this.brand = brand;
     }
@@ -40,15 +42,12 @@ public class Car implements Vehicle, Serializable, Cloneable {
         this.array = array;
     }
 
-    public int getLengthArray() {
-        return lengthArray;
-    }
-
-    private void setLengthArray(int lengthArray) {
+    private void setLength(int lengthArray) {
         this.lengthArray = lengthArray;
     }
 
-    public int getSizeArrayModels() {
+    @Override
+    public int getLength() {
         return this.array.length;
     }
 
@@ -134,7 +133,7 @@ public class Car implements Vehicle, Serializable, Cloneable {
         array = Arrays.copyOf(array, array.length + 1);
         Model model = new Model(name, price);
         array[array.length - 1] = model;
-        this.setLengthArray(this.getSizeArrayModels());
+        this.setLength(this.getLength());
     }
 
     public void deleteModel(String name) throws NoSuchModelNameException, IncorrectModelNameVehicle {
@@ -171,10 +170,10 @@ public class Car implements Vehicle, Serializable, Cloneable {
         if (o == null) return false;
         if (o instanceof Car) {
             Car car = (Car) o;
-            if (!car.getBrand().equals(this.getBrand()) || car.getSizeArrayModels() != this.getSizeArrayModels()) {
+            if (!car.getBrand().equals(this.getBrand()) || car.getLength() != this.getLength()) {
                 return false;
             }
-            for (int i = 0; i < this.getSizeArrayModels(); i++) {
+            for (int i = 0; i < this.getLength(); i++) {
                 if (!car.array[i].getModelName().equals(this.array[i].getModelName())) {
                     return false;
                 } else if (car.getArray()[i].getPrice() != this.getArray()[i].getPrice()) {

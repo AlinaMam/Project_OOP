@@ -21,13 +21,16 @@ public class Moped implements Vehicle, Serializable, Cloneable {
         list = new LinkedList<>();
     }
 
+    @Override
     public String getBrand() {
         return brand;
     }
 
+    @Override
     public void setBrand(String brand) {
         this.brand = brand;
     }
+
 
     public LinkedList<Model> getList() {
         return list;
@@ -37,14 +40,12 @@ public class Moped implements Vehicle, Serializable, Cloneable {
         this.list = list;
     }
 
-    public int getSize() {
-        return size;
-    }
-
-    public void setSize(int size) {
+    public void setLength(int size) {
         this.size = size;
     }
-    public int getSizeLinkedList() {
+
+    @Override
+    public int getLength() {
         return list.size();
     }
 
@@ -123,7 +124,7 @@ public class Moped implements Vehicle, Serializable, Cloneable {
         }
         Model model = new Model(name, price);
         this.list.add(model);
-        this.setSize(this.getSizeLinkedList());
+        this.setLength(this.getLength());
     }
 
     @Override
@@ -139,7 +140,7 @@ public class Moped implements Vehicle, Serializable, Cloneable {
                 iterator.remove();
             }
         }
-        this.setSize(this.getSizeLinkedList());
+        this.setLength(this.getLength());
     }
 
     @Override
@@ -155,10 +156,10 @@ public class Moped implements Vehicle, Serializable, Cloneable {
         if (o == null) return false;
         if (o instanceof Moped) {
             Moped moped = (Moped) o;
-            if (!moped.brand.equals(this.brand) || moped.getSizeLinkedList() != this.getSizeLinkedList()) {
+            if (!moped.brand.equals(this.brand) || moped.getLength() != this.getLength()) {
                 return false;
             }
-            for (int i = 0; i < this.getSizeLinkedList(); i++) {
+            for (int i = 0; i < this.getLength(); i++) {
                 if (!moped.list.get(i).getModelName().equals(this.list.get(i).getModelName())) {
                     return false;
                 } else if (moped.list.get(i).getPrice() != this.list.get(i).getPrice()) {

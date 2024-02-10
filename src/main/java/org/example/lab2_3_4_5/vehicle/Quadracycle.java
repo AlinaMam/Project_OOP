@@ -21,10 +21,12 @@ public class Quadracycle implements Vehicle, Serializable, Cloneable {
         list = new ArrayList<>();
     }
 
+    @Override
     public String getBrand() {
         return brand;
     }
 
+    @Override
     public void setBrand(String brand) {
         this.brand = brand;
     }
@@ -37,15 +39,12 @@ public class Quadracycle implements Vehicle, Serializable, Cloneable {
         this.list = list;
     }
 
-    public int getSize() {
-        return size;
-    }
-
-    public void setSize(int size) {
+    public void setLength(int size) {
         this.size = size;
     }
 
-    public int getSizeArrayList() {
+    @Override
+    public int getLength() {
         return list.size();
     }
 
@@ -124,7 +123,7 @@ public class Quadracycle implements Vehicle, Serializable, Cloneable {
         }
         Model model = new Model(name, price);
         this.list.add(model);
-        this.setSize(this.getSizeArrayList());
+        this.setLength(this.getLength());
     }
 
     @Override
@@ -140,8 +139,9 @@ public class Quadracycle implements Vehicle, Serializable, Cloneable {
                 iterator.remove();
             }
         }
-        this.setSize(this.getSizeArrayList());
+        this.setLength(this.getLength());
     }
+
     @Override
     public String toString() {
         StringBuffer buffer = new StringBuffer();
@@ -156,10 +156,10 @@ public class Quadracycle implements Vehicle, Serializable, Cloneable {
         if (o == null) return false;
         if (o instanceof Quadracycle) {
             Quadracycle quadracycle = (Quadracycle) o;
-            if (!quadracycle.brand.equals(this.brand) || quadracycle.getSizeArrayList() != this.getSizeArrayList()) {
+            if (!quadracycle.brand.equals(this.brand) || quadracycle.getLength() != this.getLength()) {
                 return false;
             }
-            for (int i = 0; i < this.getSizeArrayList(); i++) {
+            for (int i = 0; i < this.getLength(); i++) {
                 if (!quadracycle.list.get(i).getModelName().equals(this.list.get(i).getModelName())) {
                     return false;
                 } else if (quadracycle.list.get(i).getPrice() != this.list.get(i).getPrice()) {

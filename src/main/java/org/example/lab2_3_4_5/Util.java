@@ -1,233 +1,86 @@
 package org.example.lab2_3_4_5;
 
+import org.example.lab2_3_4_5.exception.DuplicateModelNameException;
+import org.example.lab2_3_4_5.exception.IncorrectModelNameVehicle;
+import org.example.lab2_3_4_5.exception.IncorrectPriceVehicle;
 import org.example.lab2_3_4_5.vehicle.*;
 
 import java.io.*;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
-import java.math.BigDecimal;
-import java.math.MathContext;
-import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
 
 public class Util {
-    public static void averagePrice(Vehicle vehicle) {
-        if (vehicle instanceof Car) {
-            int[] pricesOfModels = vehicle.getPricesOfModels();
-            double avgPriceCar = Arrays.stream(pricesOfModels)
-                    .average()
-                    .getAsDouble();
-            MathContext context = new MathContext(9, RoundingMode.HALF_UP);
-            BigDecimal result = new BigDecimal(avgPriceCar, context);
-            System.out.println("Average price of car: " + result);
-
-        } else if (vehicle instanceof Bike) {
-            int[] pricesOfModels = vehicle.getPricesOfModels();
-            double avgPriceCar = Arrays.stream(pricesOfModels)
-                    .average()
-                    .getAsDouble();
-            MathContext context = new MathContext(9, RoundingMode.HALF_UP);
-            BigDecimal result = new BigDecimal(avgPriceCar, context);
-            System.out.println("Average price of bike: " + result);
-
-        } else if (vehicle instanceof Scooter) {
-            int[] pricesOfModels = vehicle.getPricesOfModels();
-            double avgPriceScooter = Arrays.stream(pricesOfModels)
-                    .average()
-                    .getAsDouble();
-            MathContext context = new MathContext(9, RoundingMode.HALF_UP);
-            BigDecimal result = new BigDecimal(avgPriceScooter, context);
-            System.out.println("Average price of scooter: " + result);
-
-        } else if (vehicle instanceof Quadracycle) {
-            int[] pricesOfModels = vehicle.getPricesOfModels();
-            double avgPriceScooter = Arrays.stream(pricesOfModels)
-                    .average()
-                    .getAsDouble();
-            MathContext context = new MathContext(9, RoundingMode.HALF_UP);
-            BigDecimal result = new BigDecimal(avgPriceScooter, context);
-            System.out.println("Average price of quadracycle: " + result);
-
-        } else if (vehicle instanceof Moped) {
-            int[] pricesOfModels = vehicle.getPricesOfModels();
-            double avgPriceScooter = Arrays.stream(pricesOfModels)
-                    .average()
-                    .getAsDouble();
-            MathContext context = new MathContext(9, RoundingMode.HALF_UP);
-            BigDecimal result = new BigDecimal(avgPriceScooter, context);
-            System.out.println("Average price of moped: " + result);
+    public static double averagePrice(Vehicle vehicle) {
+        int[] pricesOfModels = vehicle.getPricesOfModels();
+        int result = 0;
+        for (int price : pricesOfModels) {
+            result += price;
         }
+        return result / pricesOfModels.length;
     }
 
     public static void getNamesOfModels(Vehicle vehicle) {
-        if (vehicle instanceof Car) {
-            String[] namesOfModels = vehicle.getNamesOfModels();
-            Arrays.stream(namesOfModels).toList().forEach(s -> System.out.println("Name of model car: " + s));
-        } else if (vehicle instanceof Bike) {
-            String[] namesOfModels = vehicle.getNamesOfModels();
-            Arrays.stream(namesOfModels).toList().forEach(s -> System.out.println("Name of model bike: " + s));
-        } else if (vehicle instanceof Scooter) {
-            String[] namesOfModels = vehicle.getNamesOfModels();
-            Arrays.stream(namesOfModels).toList().forEach(s -> System.out.println("Name of model scooter: " + s));
-        } else if (vehicle instanceof Quadracycle) {
-            String[] namesOfModels = vehicle.getNamesOfModels();
-            Arrays.stream(namesOfModels).toList().forEach(s -> System.out.println("Name of model quadracycle: " + s));
-        } else if (vehicle instanceof Moped) {
-            String[] namesOfModels = vehicle.getNamesOfModels();
-            Arrays.stream(namesOfModels).toList().forEach(s -> System.out.println("Name of model moped: " + s));
-        }
+        String[] namesOfModels = vehicle.getNamesOfModels();
+        Arrays.stream(namesOfModels).toList().forEach(s -> System.out.println("Name of model: " + s));
     }
 
     public static void outputVehicle(Vehicle vehicle, OutputStream out) {
-        if (vehicle instanceof Car) {
-            Car car = (Car) vehicle;
-            String brand = car.getBrand();
-            int countModels = car.getLengthArray();
-            String[] namesOfModels = car.getNamesOfModels();
-            int[] pricesOfModels = car.getPricesOfModels();
-            try {
-                ((DataOutputStream) out).writeUTF(brand);
-                ((DataOutputStream) out).writeInt(countModels);
-                for (String line : namesOfModels) {
-                    ((DataOutputStream) out).writeUTF(line);
-                }
-                for (int price : pricesOfModels) {
-                    ((DataOutputStream) out).writeInt(price);
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-            } finally {
-                try {
-                    out.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+        DataOutputStream dos = new DataOutputStream(out);
+        String brand = vehicle.getBrand();
+        int countModels = vehicle.getLength();
+        String[] namesOfModels = vehicle.getNamesOfModels();
+        int[] pricesOfModels = vehicle.getPricesOfModels();
+        try {
+            dos.writeUTF(brand);
+            dos.writeInt(countModels);
+            for (String line : namesOfModels) {
+                dos.writeUTF(line);
             }
-        } else if (vehicle instanceof Bike) {
-            Bike bike = (Bike) vehicle;
-            String brand = bike.getBrand();
-            int countModels = bike.getSizeLinkedList();
-            String[] namesOfModels = bike.getNamesOfModels();
-            int[] pricesOfModels = bike.getPricesOfModels();
-            try {
-                ((DataOutputStream) out).writeUTF(brand);
-                ((DataOutputStream) out).writeInt(countModels);
-                for (String line : namesOfModels) {
-                    ((DataOutputStream) out).writeUTF(line);
-                }
-                for (int price : pricesOfModels) {
-                    ((DataOutputStream) out).writeInt(price);
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-            } finally {
-                try {
-                    out.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+            for (int price : pricesOfModels) {
+                dos.writeInt(price);
             }
-        } else if (vehicle instanceof Scooter) {
-            Scooter scooter = (Scooter) vehicle;
-            String brand = scooter.getBrand();
-            int countModels = scooter.getSizeHashMap();
-            String[] namesOfModels = scooter.getNamesOfModels();
-            int[] pricesOfModels = scooter.getPricesOfModels();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
             try {
-                ((DataOutputStream) out).writeUTF(brand);
-                ((DataOutputStream) out).writeInt(countModels);
-                for (String line : namesOfModels) {
-                    ((DataOutputStream) out).writeUTF(line);
-                }
-                for (int price : pricesOfModels) {
-                    ((DataOutputStream) out).writeInt(price);
-                }
+                out.close();
             } catch (IOException e) {
                 e.printStackTrace();
-            } finally {
-                try {
-                    out.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        } else if (vehicle instanceof Quadracycle) {
-            Quadracycle quadracycle = (Quadracycle) vehicle;
-            String brand = quadracycle.getBrand();
-            int countModels = quadracycle.getSizeArrayList();
-            String[] namesOfModels = quadracycle.getNamesOfModels();
-            int[] pricesOfModels = quadracycle.getPricesOfModels();
-            try {
-                ((DataOutputStream) out).writeUTF(brand);
-                ((DataOutputStream) out).writeInt(countModels);
-                for (String line : namesOfModels) {
-                    ((DataOutputStream) out).writeUTF(line);
-                }
-                for (int price : pricesOfModels) {
-                    ((DataOutputStream) out).writeInt(price);
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-            } finally {
-                try {
-                    out.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        } else if (vehicle instanceof Moped) {
-            Moped moped = (Moped) vehicle;
-            String brand = moped.getBrand();
-            int countModels = moped.getSizeLinkedList();
-            String[] namesOfModels = moped.getNamesOfModels();
-            int[] pricesOfModels = moped.getPricesOfModels();
-            try {
-                ((DataOutputStream) out).writeUTF(brand);
-                ((DataOutputStream) out).writeInt(countModels);
-                for (String line : namesOfModels) {
-                    ((DataOutputStream) out).writeUTF(line);
-                }
-                for (int price : pricesOfModels) {
-                    ((DataOutputStream) out).writeInt(price);
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-            } finally {
-                try {
-                    out.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
             }
         }
     }
 
-    public static Vehicle inputCar(InputStream in) {
+    public static Vehicle inputCar(InputStream in) throws DuplicateModelNameException, IncorrectPriceVehicle, IncorrectModelNameVehicle {
+        DataInputStream dis = new DataInputStream(in);
         Vehicle car = null;
         //пример с использованием DataInputStream
         try {
-            String brand = ((DataInputStream) in).readUTF();
-            int countModels = ((DataInputStream) in).readInt();
+            String brand = dis.readUTF();
+            int countModels = dis.readInt();
             int numModels = countModels;
             int numPrice = countModels;
             List<String> models = new ArrayList<>();
             while (numModels > 0) {
-                models.add(((DataInputStream) in).readUTF());
+                models.add(dis.readUTF());
                 numModels--;
             }
             String[] model = models.stream().toArray(String[]::new);
 
             List<Integer> prices = new ArrayList<>();
             while (numPrice > 0) {
-                prices.add(((DataInputStream) in).readInt());
+                prices.add(dis.readInt());
                 numPrice--;
             }
             int[] price = prices.stream().mapToInt(Integer::intValue).toArray();
 
             car = new Car(brand, countModels);
+            for (int i = 0; i < countModels; i++) {
+                car.addNewModel(model[i], price[i]);
+            }
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -241,28 +94,32 @@ public class Util {
         return car;
     }
 
-    public static Vehicle inputBike(InputStream in) {
+    public static Vehicle inputBike(InputStream in) throws DuplicateModelNameException, IncorrectPriceVehicle, IncorrectModelNameVehicle {
+        DataInputStream dis = new DataInputStream(in);
         Vehicle bike = null;
         try {
-            String brand = ((DataInputStream) in).readUTF();
-            int countModels = ((DataInputStream) in).readInt();
+            String brand = dis.readUTF();
+            int countModels = dis.readInt();
             int numModels = countModels;
             int numPrice = countModels;
             List<String> models = new ArrayList<>();
             while (numModels > 0) {
-                models.add(((DataInputStream) in).readUTF());
+                models.add(dis.readUTF());
                 numModels--;
             }
             String[] model = models.stream().toArray(String[]::new);
 
             List<Integer> prices = new ArrayList<>();
             while (numPrice > 0) {
-                prices.add(((DataInputStream) in).readInt());
+                prices.add(dis.readInt());
                 numPrice--;
             }
             int[] price = prices.stream().mapToInt(Integer::intValue).toArray();
 
             bike = new Bike(brand, countModels);
+            for (int i = 0; i < countModels; i++) {
+                bike.addNewModel(model[i], price[i]);
+            }
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -276,28 +133,32 @@ public class Util {
         return bike;
     }
 
-    public static Vehicle inputScooter(InputStream in) {
+    public static Vehicle inputScooter(InputStream in) throws DuplicateModelNameException, IncorrectPriceVehicle, IncorrectModelNameVehicle {
+        DataInputStream dis = new DataInputStream(in);
         Vehicle scooter = null;
         try {
-            String brand = ((DataInputStream) in).readUTF();
-            int countModels = ((DataInputStream) in).readInt();
+            String brand = dis.readUTF();
+            int countModels = dis.readInt();
             int numModels = countModels;
             int numPrice = countModels;
             List<String> models = new ArrayList<>();
             while (numModels > 0) {
-                models.add(((DataInputStream) in).readUTF());
+                models.add(dis.readUTF());
                 numModels--;
             }
             String[] model = models.stream().toArray(String[]::new);
 
             List<Integer> prices = new ArrayList<>();
             while (numPrice > 0) {
-                prices.add(((DataInputStream) in).readInt());
+                prices.add(dis.readInt());
                 numPrice--;
             }
             int[] price = prices.stream().mapToInt(Integer::intValue).toArray();
 
             scooter = new Scooter(brand, countModels);
+            for (int i = 0; i < countModels; i++) {
+                scooter.addNewModel(model[i], price[i]);
+            }
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -311,28 +172,32 @@ public class Util {
         return scooter;
     }
 
-    public static Vehicle inputQuadracycle(InputStream in) {
+    public static Vehicle inputQuadracycle(InputStream in) throws DuplicateModelNameException, IncorrectPriceVehicle, IncorrectModelNameVehicle {
+        DataInputStream dis = new DataInputStream(in);
         Vehicle quadracycle = null;
         try {
-            String brand = ((DataInputStream) in).readUTF();
-            int countModels = ((DataInputStream) in).readInt();
+            String brand = dis.readUTF();
+            int countModels = dis.readInt();
             int numModels = countModels;
             int numPrice = countModels;
             List<String> models = new ArrayList<>();
             while (numModels > 0) {
-                models.add(((DataInputStream) in).readUTF());
+                models.add(dis.readUTF());
                 numModels--;
             }
             String[] model = models.stream().toArray(String[]::new);
 
             List<Integer> prices = new ArrayList<>();
             while (numPrice > 0) {
-                prices.add(((DataInputStream) in).readInt());
+                prices.add(dis.readInt());
                 numPrice--;
             }
             int[] price = prices.stream().mapToInt(Integer::intValue).toArray();
 
             quadracycle = new Quadracycle(brand, countModels);
+            for (int i = 0; i < countModels; i++) {
+                quadracycle.addNewModel(model[i], price[i]);
+            }
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -346,28 +211,32 @@ public class Util {
         return quadracycle;
     }
 
-    public static Vehicle inputMoped(InputStream in) {
+    public static Vehicle inputMoped(InputStream in) throws DuplicateModelNameException, IncorrectPriceVehicle, IncorrectModelNameVehicle {
+        DataInputStream dis = new DataInputStream(in);
         Vehicle moped = null;
         try {
-            String brand = ((DataInputStream) in).readUTF();
-            int countModels = ((DataInputStream) in).readInt();
+            String brand = dis.readUTF();
+            int countModels = dis.readInt();
             int numModels = countModels;
             int numPrice = countModels;
             List<String> models = new ArrayList<>();
             while (numModels > 0) {
-                models.add(((DataInputStream) in).readUTF());
+                models.add(dis.readUTF());
                 numModels--;
             }
             String[] model = models.stream().toArray(String[]::new);
 
             List<Integer> prices = new ArrayList<>();
             while (numPrice > 0) {
-                prices.add(((DataInputStream) in).readInt());
+                prices.add(dis.readInt());
                 numPrice--;
             }
             int[] price = prices.stream().mapToInt(Integer::intValue).toArray();
 
             moped = new Moped(brand, countModels);
+            for (int i = 0; i < countModels; i++) {
+                moped.addNewModel(model[i], price[i]);
+            }
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -382,228 +251,151 @@ public class Util {
     }
 
 
-    public static void writeVehicle(Vehicle vehicle, Writer out) {
-        if (vehicle instanceof Car) {
-            Car car = (Car) vehicle;
-            String brand = car.getBrand();
-            int countModels = car.getSizeArrayModels();
-            String[] namesOfModels = car.getNamesOfModels();
-            int[] pricesOfModels = car.getPricesOfModels();
-            try {
-                out.write(brand + "\n");
-                out.write(countModels + "\n");
-                for (String line : namesOfModels) {
-                    out.write(line + "\n");
-                }
-                for (int price : pricesOfModels) {
-                    out.write(price + "\n");
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-            } finally {
-                try {
-                    out.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+    public static void writeVehicle(Vehicle vehicle, Writer writer) {
+        BufferedWriter bw = new BufferedWriter(writer);
+        String brand = vehicle.getBrand();
+        int countModels = vehicle.getLength();
+        String[] namesOfModels = vehicle.getNamesOfModels();
+        int[] pricesOfModels = vehicle.getPricesOfModels();
+        try {
+            bw.write(brand + "\n");
+            bw.write(countModels + "\n");
+            for (String line : namesOfModels) {
+                bw.write(line + "\n");
             }
-        } else if (vehicle instanceof Bike) {
-            Bike bike = (Bike) vehicle;
-            String brand = bike.getBrand();
-            int countModels = bike.getSizeLinkedList();
-            String[] namesOfModels = bike.getNamesOfModels();
-            int[] pricesOfModels = bike.getPricesOfModels();
-            try {
-                out.write(brand + "\n");
-                out.write(countModels + "\n");
-                for (String line : namesOfModels) {
-                    out.write(line + "\n");
-                }
-                for (int price : pricesOfModels) {
-                    out.write(price + "\n");
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-            } finally {
-                try {
-                    out.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+            for (int price : pricesOfModels) {
+                bw.write(price + "\n");
             }
-        } else if (vehicle instanceof Scooter) {
-            Scooter scooter = (Scooter) vehicle;
-            String brand = scooter.getBrand();
-            int countModels = scooter.getSizeHashMap();
-            String[] namesOfModels = scooter.getNamesOfModels();
-            int[] pricesOfModels = scooter.getPricesOfModels();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
             try {
-                out.write(brand + "\n");
-                out.write(countModels + "\n");
-                for (String line : namesOfModels) {
-                    out.write(line + "\n");
-                }
-                for (int price : pricesOfModels) {
-                    out.write(price + "\n");
-                }
+                bw.close();
             } catch (IOException e) {
                 e.printStackTrace();
-            } finally {
-                try {
-                    out.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        } else if (vehicle instanceof Quadracycle) {
-            Quadracycle quadracycle = (Quadracycle) vehicle;
-            String brand = quadracycle.getBrand();
-            int countModels = quadracycle.getSizeArrayList();
-            String[] namesOfModels = quadracycle.getNamesOfModels();
-            int[] pricesOfModels = quadracycle.getPricesOfModels();
-            try {
-                out.write(brand + "\n");
-                out.write(countModels + "\n");
-                for (String line : namesOfModels) {
-                    out.write(line + "\n");
-                }
-                for (int price : pricesOfModels) {
-                    out.write(price + "\n");
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-            } finally {
-                try {
-                    out.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        } else if (vehicle instanceof Moped) {
-            Moped moped = (Moped) vehicle;
-            String brand = moped.getBrand();
-            int countModels = moped.getSizeLinkedList();
-            String[] namesOfModels = moped.getNamesOfModels();
-            int[] pricesOfModels = moped.getPricesOfModels();
-            try {
-                out.write(brand + "\n");
-                out.write(countModels + "\n");
-                for (String line : namesOfModels) {
-                    out.write(line + "\n");
-                }
-                for (int price : pricesOfModels) {
-                    out.write(price + "\n");
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-            } finally {
-                try {
-                    out.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
             }
         }
     }
 
-    public static Vehicle readCar(Scanner scanner) {
+    public static Vehicle readCar(Scanner scanner) throws DuplicateModelNameException, IncorrectPriceVehicle, IncorrectModelNameVehicle {
         //чтение Scanner-ом
         Vehicle car = null;
         try {
             String brand = scanner.next();
             int countModels = scanner.nextInt();
+            String[] models = new String[countModels];
+            for (int i = 0; i < models.length; i++) {
+                models[i] = scanner.next();
+            }
+            int[] prices = new int[countModels];
+            for (int i = 0; i < prices.length; i++) {
+                prices[i] = scanner.nextInt();
+            }
             car = new Car(brand, countModels);
+            for (int i = 0; i < countModels; i++) {
+                car.addNewModel(models[i], prices[i]);
+            }
+
         } finally {
             scanner.close();
         }
-        //чтение BufferedReader-ом
-       /* StringBuilder builder = new StringBuilder();
-        try {
-            int num;
-            while ((num = in.read()) != -1) {
-                builder.append((char) num);
-            }
-            String line = new String(builder);
-            String[] buffer = line.split("\n");
-            for (int i = 0; i < buffer.length; i++) {
-                car = new Car(buffer[0], Integer.parseInt(buffer[1]));
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }*/
         return car;
     }
 
-    public static Vehicle readBike(Reader in) {
+    public static Vehicle readBike(Reader in) throws DuplicateModelNameException, IncorrectPriceVehicle, IncorrectModelNameVehicle {
+        BufferedReader br = new BufferedReader(in);
         Vehicle bike = null;
-        StringBuilder builder = new StringBuilder();
         try {
-            int num;
-            while ((num = in.read()) != -1) {
-                builder.append((char) num);
+            String brand = br.readLine();
+            int countModels = Integer.parseInt(br.readLine());
+            String[] models = new String[countModels];
+            for (int i = 0; i < models.length; i++) {
+                models[i] = br.readLine();
             }
-            String line = new String(builder);
-            String[] buffer = line.split("\n");
-            for (int i = 0; i < buffer.length; i++) {
-                bike = new Bike(buffer[0], Integer.parseInt(buffer[1]));
+            int[] prices = new int[countModels];
+            for (int i = 0; i < prices.length; i++) {
+                prices[i] = Integer.parseInt(br.readLine());
             }
+            bike = new Bike(brand, countModels);
+            for (int i = 0; i < countModels; i++) {
+                bike.addNewModel(models[i], prices[i]);
+            }
+
         } catch (IOException e) {
             e.printStackTrace();
         }
         return bike;
     }
 
-    public static Vehicle readScooter(Reader in) {
+    public static Vehicle readScooter(Reader in) throws DuplicateModelNameException, IncorrectPriceVehicle, IncorrectModelNameVehicle {
+        BufferedReader br = new BufferedReader(in);
         Vehicle scooter = null;
-        StringBuilder builder = new StringBuilder();
         try {
-            int num;
-            while ((num = in.read()) != -1) {
-                builder.append((char) num);
+            String brand = br.readLine();
+            int countModels = Integer.parseInt(br.readLine());
+            String[] models = new String[countModels];
+            for (int i = 0; i < models.length; i++) {
+                models[i] = br.readLine();
             }
-            String line = new String(builder);
-            String[] buffer = line.split("\n");
-            for (int i = 0; i < buffer.length; i++) {
-                scooter = new Scooter(buffer[0], Integer.parseInt(buffer[1]));
+            int[] prices = new int[countModels];
+            for (int i = 0; i < prices.length; i++) {
+                prices[i] = Integer.parseInt(br.readLine());
             }
+            scooter = new Scooter(brand, countModels);
+            for (int i = 0; i < countModels; i++) {
+                scooter.addNewModel(models[i], prices[i]);
+            }
+
         } catch (IOException e) {
             e.printStackTrace();
         }
         return scooter;
     }
 
-    public static Vehicle readQuadracycle(Reader in) {
+    public static Vehicle readQuadracycle(Reader in) throws DuplicateModelNameException, IncorrectPriceVehicle, IncorrectModelNameVehicle {
+        BufferedReader br = new BufferedReader(in);
         Vehicle quadracycle = null;
-        StringBuilder builder = new StringBuilder();
         try {
-            int num;
-            while ((num = in.read()) != -1) {
-                builder.append((char) num);
+            String brand = br.readLine();
+            int countModels = Integer.parseInt(br.readLine());
+            String[] models = new String[countModels];
+            for (int i = 0; i < models.length; i++) {
+                models[i] = br.readLine();
             }
-            String line = new String(builder);
-            String[] buffer = line.split("\n");
-            for (int i = 0; i < buffer.length; i++) {
-                quadracycle = new Quadracycle(buffer[0], Integer.parseInt(buffer[1]));
+            int[] prices = new int[countModels];
+            for (int i = 0; i < prices.length; i++) {
+                prices[i] = Integer.parseInt(br.readLine());
             }
+            quadracycle = new Quadracycle(brand, countModels);
+            for (int i = 0; i < countModels; i++) {
+                quadracycle.addNewModel(models[i], prices[i]);
+            }
+
         } catch (IOException e) {
             e.printStackTrace();
         }
         return quadracycle;
     }
 
-    public static Vehicle readMoped(Reader in) {
+    public static Vehicle readMoped(Reader in) throws DuplicateModelNameException, IncorrectPriceVehicle, IncorrectModelNameVehicle {
+        BufferedReader br = new BufferedReader(in);
         Vehicle moped = null;
-        StringBuilder builder = new StringBuilder();
         try {
-            int num;
-            while ((num = in.read()) != -1) {
-                builder.append((char) num);
+            String brand = br.readLine();
+            int countModels = Integer.parseInt(br.readLine());
+            String[] models = new String[countModels];
+            for (int i = 0; i < models.length; i++) {
+                models[i] = br.readLine();
             }
-            String line = new String(builder);
-            String[] buffer = line.split("\n");
-            for (int i = 0; i < buffer.length; i++) {
-                moped = new Moped(buffer[0], Integer.parseInt(buffer[1]));
+            int[] prices = new int[countModels];
+            for (int i = 0; i < prices.length; i++) {
+                prices[i] = Integer.parseInt(br.readLine());
             }
+            moped = new Moped(brand, countModels);
+            for (int i = 0; i < countModels; i++) {
+                moped.addNewModel(models[i], prices[i]);
+            }
+
         } catch (IOException e) {
             e.printStackTrace();
         }
