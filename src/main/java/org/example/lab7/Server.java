@@ -1,7 +1,6 @@
 package org.example.lab7;
 
 import org.example.lab2_3_4_5.Vehicle;
-import org.example.lab2_3_4_5.vehicle.Car;
 
 import java.io.DataOutputStream;
 import java.io.IOException;
