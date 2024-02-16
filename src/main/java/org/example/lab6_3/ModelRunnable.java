@@ -15,14 +15,14 @@ public class ModelRunnable implements Runnable {
 
     @Override
     public void run() {
-        this.locker.lock();
+        locker.lock();
         try {
-            String[] namesOfModels = this.vehicle.getNamesOfModels();
+            String[] namesOfModels = vehicle.getNamesOfModels();
             for (String model : namesOfModels) {
                 System.out.println("Model name: " + model);
             }
         } finally {
-            this.locker.unlock();
+            locker.unlock();
         }
     }
 }

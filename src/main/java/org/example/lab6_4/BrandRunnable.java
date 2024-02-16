@@ -11,6 +11,6 @@ public class BrandRunnable implements Runnable {
 
     @Override
     public void run() {
-        System.out.println(this.vehicle.getBrand() + " with " + Thread.currentThread().getName());
+        System.out.println(vehicle.getBrand() + " with " + Thread.currentThread().getName());
     }
 }

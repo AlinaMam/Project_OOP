@@ -182,17 +182,17 @@ public class Main {
         System.out.println("---");*/
 
         //Задание №3
-       /* Lock locker = new ReentrantLock();
+        Lock locker = new ReentrantLock();
         ModelRunnable mr = new ModelRunnable(car, locker);
         PriceRunnable pr = new PriceRunnable(car ,locker);
         Thread tModel = new Thread(mr);
         Thread tPrice = new Thread(pr);
 
         tModel.start();
-        tPrice.start();*/
+        tPrice.start();
 
         //Задание №4
-       /* ExecutorService executor1 = Executors.newFixedThreadPool(2);
+        /*ExecutorService executor1 = Executors.newFixedThreadPool(2);
         BrandRunnable brand1 = new BrandRunnable(car);
         BrandRunnable brand2 = new BrandRunnable(bike);
         BrandRunnable brand3 = new BrandRunnable(vespa);
@@ -205,12 +205,12 @@ public class Main {
         for (int i = 0; i < brands.length; i++) {
             executor1.execute(brands[i]);
         }
-        executor1.shutdown();
+        executor1.shutdown();*/
 
-        System.out.println("---");*/
+        System.out.println("---");
 
         //Задание №5
-        ArrayBlockingQueue<Vehicle> vehicles = new ArrayBlockingQueue<>(4);
+       /* ArrayBlockingQueue<Vehicle> vehicles = new ArrayBlockingQueue<>(4);
         String name1 = "brand1.txt";
         String name2 = "brand2.txt";
         String name3 = "brand3.txt";
@@ -224,6 +224,6 @@ public class Main {
         for (String name : names) {
             executor2.execute(new MyVehicle(name, vehicles));
         }
-        executor2.shutdown();
+        executor2.shutdown();*/
     }
 }

@@ -15,14 +15,14 @@ public class PriceRunnable implements Runnable {
 
     @Override
     public void run() {
-        this.locker.lock();
+        locker.lock();
         try {
-            int[] pricesOfModels = this.vehicle.getPricesOfModels();
+            int[] pricesOfModels = vehicle.getPricesOfModels();
             for (int price : pricesOfModels) {
                 System.out.println("Price: " + price);
             }
         } finally {
-            this.locker.unlock();
+            locker.unlock();
         }
     }
 }
